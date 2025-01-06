@@ -74,7 +74,6 @@ class EmbeddingViewModel: ObservableObject {
         inspectModelInputOutput()
     }
 
-    // Inspect the model's expected input/output features
     func inspectModelInputOutput() {
         guard let model = loadCompiledModel() else {
             print("Failed to load the model.")
@@ -83,7 +82,6 @@ class EmbeddingViewModel: ObservableObject {
         
         print("Inspecting model input/output features...")
         
-        // Inspect model input and output descriptions
         for input in model.modelDescription.inputDescriptionsByName {
             print("Input name: \(input.key), type: \(input.value)")
         }
@@ -93,7 +91,6 @@ class EmbeddingViewModel: ObservableObject {
         }
     }
 
-    // Load embeddings and answer from JSON
     func loadEmbeddings() {
         if let jsonFileURL = Bundle.main.url(forResource: "embeddings", withExtension: "json") {
             do {
@@ -102,7 +99,7 @@ class EmbeddingViewModel: ObservableObject {
                 let embeddingData = try decoder.decode(EmbeddingData.self, from: data)
                 
                 embeddings = zip(embeddingData.questions, embeddingData.embeddings).map { QuestionEmbedding(question: $0, embedding: $1) }
-                answer = embeddingData.answer  // Load answer array from the JSON
+                answer = embeddingData.answer
                 
                 print("Loaded \(embeddings.count) embeddings and \(answer.count) answer")
             } catch {
@@ -113,7 +110,6 @@ class EmbeddingViewModel: ObservableObject {
         }
     }
     
-    // Find the most similar question by comparing embeddings
     func findMostSimilarQuestion() {
         print("User input: \(userInput)")
         guard let userInputEmbedding = generateUserInputEmbedding(for: userInput) else {
